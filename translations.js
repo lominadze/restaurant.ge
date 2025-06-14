@@ -1,13 +1,13 @@
 // translations.js
 const translations = {
   ka: {
-    add_to_cart: "კალათში დამატება",
+    add_to_cart: "მენიუში დამატება",
     clear_cart_confirm: "დარწმუნებული ხართ, რომ გსურთ მენიუს გასუფთავება?",
     no_results: "შედეგები არ მოიძებნა",
     search_term: "ძებნის ტერმინი",
     empty_menu: "მენიუ ცარიელია",
     logout_confirm: "დარწმუნებული ხართ, რომ გსურთ გამოსვლა?",
-    title: "მაჭახელა - ქართული რესტორანი",
+    title: "SAHIL RESTORAN",
     admin: "ადმინი",
     login: "შესვლა",
     logout: "გამოსვლა",
@@ -28,11 +28,12 @@ const translations = {
     total: "სულ",
     empty_cart: "თქვენი მენიუ ცარიელია",
     add_items: "დაამატეთ პროდუქტები მენიუდან",
-    address: "მაჭახელა 13, ბათუმი",
-    wifi: "WiFi: Gourmet_2023",
-    password: "PASS: Gourmet_2023",
-    description: "ჩვენი რესტორანი მოგაწვდით ტრადიციულ და თანამედროვე ქართულ კერძებს. ყველა პროდუქტი ადგილობრივი ფერმერებისგან არის შერჩეული.",
-    working_hours: "ყოველდღე: 10:00 - 23:00",
+    address: "ანდრია პირველწოდებულის გზატკეცილი 15, ბათუმი",
+    wifi: "WiFi: SAHIL",
+    password: "PASS: sahil5353",
+    phone: "შეკვეთის ნომერი:",
+    description: "ჩვენი რესტორანი მოგაწვდით ტრადიციულ და თანამედროვე თურქულ კერძებს. გთხოვთ ისიამოვნოთ ჩვენი ავთენტური სამზარეულოთი და თბილი სტუმართმოყვარეობით. ჩვენი შეფ-მზარეული ყოველდღიურად ამზადებს კერძებს ახალი და ხარისხიანი ინგრედიენტებით.",
+    working_hours: "ყოველდღე: 24/7",
     admin_panel: "ადმინის პანელი",
     add_new_item: "ახალი პროდუქტის დამატება",
     item_name: "სახელი",
@@ -61,17 +62,16 @@ const translations = {
     no: "არა",
     cancel: "გაუქმება",
     confirm: "დადასტურება",
-    cart_cleared: "მენიუ წარმატებით გასუფთავდა",
-    // ... (დანარჩენი თარგმანები)
+    cart_cleared: "მენიუ წარმატებით გასუფთავდა"
   },
   en: {
-    add_to_cart: "Add to Cart",
+    add_to_cart: "Add to Menu",
     clear_cart_confirm: "Are you sure you want to clear the menu?",
     no_results: "No results found",
     search_term: "Search term",
     empty_menu: "Menu is empty",
     logout_confirm: "Are you sure you want to logout?",
-    title: "Machakhela - Georgian Restaurant",
+    title: "SAHIL RESTAURANT",
     admin: "Admin",
     login: "Login",
     logout: "Logout",
@@ -92,11 +92,12 @@ const translations = {
     total: "Total",
     empty_cart: "Your menu is empty",
     add_items: "Add items from menu",
-    address: "Machakhela 13, Batumi",
-    wifi: "WiFi: Gourmet_2023",
-    password: "PASS: Gourmet_2023",
-    description: "Our restaurant offers traditional and modern Georgian dishes. All products are selected from local farmers.",
-    working_hours: "Daily: 10:00 - 23:00",
+    address: "Andria Pirveltsodebuli Highway 15, Batumi",
+    wifi: "WiFi: SAHIL",
+    password: "PASS: sahil5353",
+    phone: "Order number:",
+    description: "Our restaurant offers traditional and modern Turkish cuisine. Enjoy our authentic dishes and warm hospitality. Our chef prepares dishes daily using fresh and high-quality ingredients.",
+    working_hours: "Daily: 24/7",
     admin_panel: "Admin Panel",
     add_new_item: "Add New Item",
     item_name: "Name",
@@ -121,20 +122,20 @@ const translations = {
     translation: "Translation",
     save_translations: "Save Translations",
     auto_translate_all: "Auto Translate All",
-      yes: "Yes",
+    yes: "Yes",
     no: "No",
     cancel: "Cancel",
-    confirm: "confirm",
-    cart_cleared: "Menu cleared successfully",
+    confirm: "Confirm",
+    cart_cleared: "Menu cleared successfully"
   },
   ru: {
-    add_to_cart: "Добавить в корзину",
+    add_to_cart: "Добавить в меню",
     clear_cart_confirm: "Вы уверены, что хотите очистить меню?",
     no_results: "Ничего не найдено",
     search_term: "Поисковый запрос",
     empty_menu: "Меню пустое",
     logout_confirm: "Вы уверены, что хотите выйти?",
-    title: "Мачахела - Грузинский ресторан",
+    title: "РЕСТОРАН SAHIL",
     admin: "Админ",
     login: "Вход",
     logout: "Выход",
@@ -155,11 +156,12 @@ const translations = {
     total: "Итого",
     empty_cart: "Ваше меню пустое",
     add_items: "Добавьте блюда из меню",
-    address: "Мачахела 13, Батуми",
-    wifi: "WiFi: Gourmet_2023",
-    password: "ПАРОЛЬ: Gourmet_2023",
-    description: "Наш ресторан предлагает традиционные и современные грузинские блюда. Все продукты отобраны у местных фермеров.",
-    working_hours: "Ежедневно: 10:00 - 23:00",
+    address: "Шоссе Андрея Первозванного 15, Батуми",
+    wifi: "WiFi: SAHIL",
+    password: "ПАРОЛЬ: sahil5353",
+    phone: "Номер заказа:",
+    description: "Наш ресторан предлагает традиционную и современную турецкую кухню. Наслаждайтесь аутентичными блюдами и теплым гостеприимством. Наш шеф-повар готовит блюда ежедневно из свежих и качественных ингредиентов.",
+    working_hours: "Ежедневно: 24/7",
     admin_panel: "Админ панель",
     add_new_item: "Добавить новый товар",
     item_name: "Название",
@@ -184,20 +186,20 @@ const translations = {
     translation: "Перевод",
     save_translations: "Сохранить переводы",
     auto_translate_all: "Авто Перевод Всех",
-     yes: "Да",
+    yes: "Да",
     no: "Нет",
     cancel: "Отмена",
-    confirm:"подтвердить",
-    cart_cleared: "Меню успешно очищено",
+    confirm: "Подтвердить",
+    cart_cleared: "Меню успешно очищено"
   },
   tr: {
-    add_to_cart: "Sepete Ekle",
+    add_to_cart: "Menüye Ekle",
     clear_cart_confirm: "Menüyü temizlemek istediğinizden emin misiniz?",
     no_results: "Sonuç bulunamadı",
     search_term: "Arama terimi",
     empty_menu: "Menü boş",
     logout_confirm: "Çıkış yapmak istediğinizden emin misiniz?",
-    title: "Maçakhela - Gürcü Restoranı",
+    title: "SAHİL RESTORAN",
     admin: "Yönetici",
     login: "Giriş",
     logout: "Çıkış",
@@ -218,11 +220,12 @@ const translations = {
     total: "Toplam",
     empty_cart: "Menünüz boş",
     add_items: "Menüden ürün ekleyin",
-    address: "Maçakhela 13, Batum",
-    wifi: "WiFi: Gourmet_2023",
-    password: "ŞİFRE: Gourmet_2023",
-    description: "Restoranımız geleneksel ve modern Gürcü yemekleri sunmaktadır. Tüm ürünler yerel çiftçilerden seçilmiştir.",
-    working_hours: "Her gün: 10:00 - 23:00",
+    address: "Andre Birincil Otoyolu 15, Batum",
+    wifi: "WiFi: SAHIL",
+    password: "ŞİFRE: sahil5353",
+    phone: "Sipariş numarası:",
+    description: "Restoranımız geleneksel ve modern Türk mutfağı sunmaktadır. Otantik yemeklerimizin ve sıcak misafirperverliğimizin tadını çıkarın. Şefimiz taze ve kaliteli malzemeler kullanarak yemekleri günlük olarak hazırlar.",
+    working_hours: "Her gün: 24/7",
     admin_panel: "Yönetici Paneli",
     add_new_item: "Yeni Ürün Ekle",
     item_name: "Ad",
@@ -242,16 +245,16 @@ const translations = {
     save_service: "Kaydet",
     service_fee: "Servis",
     static_translations: "Statik Metinler",
-    menu_item_translations: "Menü Öğelerი",
+    menu_item_translations: "Menü Öğeleri",
     menu_item: "Ürün",
     translation: "Çeviri",
     save_translations: "Çevirileri Kaydet",
     auto_translate_all: "Tümünü Otomatik Çevir",
-     yes: "Evet",
+    yes: "Evet",
     no: "Hayır",
     cancel: "İptal",
-    confirm:"onayla",
-    cart_cleared: "Menü başarıyla temizlendi",
+    confirm: "Onayla",
+    cart_cleared: "Menü başarıyla temizlendi"
   }
 };
 
@@ -261,6 +264,9 @@ const untranslatableBrands = [
   'კოკა-კოლა', 'ფანტა', 'სპრაიტი', 'პეპსი', 'ლიპტონი', 'ნესკაფე',
   'Кока-Кола', 'Фанта', 'Спрайт', 'Пепси', 'Липтон', 'Нескафе'
 ];
+
+// Cache for menu item translations
+const menuTranslationsCache = {};
 
 function isDrinkCategory(itemElement) {
   if (!itemElement) return false;
@@ -316,20 +322,41 @@ function changeLanguage(lang) {
   }
 }
 
-function translateText(text, lang, element) {
+async function translateText(text, lang, element) {
   if (!text || shouldNotTranslate(text, element)) {
     return text;
   }
   
+  // Check cache first
+  const cacheKey = `${text}-${lang}`;
+  if (menuTranslationsCache[cacheKey]) {
+    return menuTranslationsCache[cacheKey];
+  }
+  
   // Check if this is a menu item name that should be translated
-  const menuItems = document.querySelectorAll('.menu-item h3, .admin-menu-item h3');
+  const menuItems = document.querySelectorAll('.menu-item, .admin-menu-item');
   for (const item of menuItems) {
-    if (item.textContent.trim() === text.trim()) {
-      const id = item.closest('.menu-item, .admin-menu-item')?.dataset?.id;
+    const title = item.querySelector('h3');
+    if (title && title.textContent.trim() === text.trim()) {
+      const id = item.dataset?.id;
       if (id) {
-        const translatedName = firebase.database().ref(`menuItems/${id}/translations/${lang}/name`).once('value');
-        if (translatedName && translatedName.val()) {
-          return translatedName.val();
+        // Return cached translation if available
+        if (menuTranslationsCache[id]?.[lang]) {
+          return menuTranslationsCache[id][lang];
+        }
+        
+        // Fetch translation from Firebase
+        try {
+          const snapshot = await firebase.database().ref(`menuItems/${id}/translations/${lang}/name`).once('value');
+          const translatedName = snapshot.val();
+          if (translatedName) {
+            // Update cache
+            if (!menuTranslationsCache[id]) menuTranslationsCache[id] = {};
+            menuTranslationsCache[id][lang] = translatedName;
+            return translatedName;
+          }
+        } catch (error) {
+          console.error("Translation fetch error:", error);
         }
       }
     }
@@ -338,7 +365,7 @@ function translateText(text, lang, element) {
   return text;
 }
 
-function translatePageContent(lang) {
+async function translatePageContent(lang) {
   const t = translations[lang];
   
   // Translate UI elements
@@ -358,6 +385,12 @@ function translatePageContent(lang) {
       </svg>
       ${t.address}
     `;
+  }
+  
+  // Translate phone text
+  const phoneText = document.getElementById('phone-text');
+  if (phoneText) {
+    phoneText.textContent = t.phone;
   }
   
   const wifiElements = document.querySelectorAll('.wifi');
@@ -385,16 +418,19 @@ function translatePageContent(lang) {
   const spacing = document.querySelector('.spacing');
   if (spacing) spacing.textContent = t.working_hours;
   
+  // Translate cart
   translateCart(lang);
   
   // Translate menu items (except drinks)
-  document.querySelectorAll('.menu-item h3').forEach(title => {
+  const menuTitles = document.querySelectorAll('.menu-item h3');
+  for (const title of menuTitles) {
     const originalText = title.dataset.originalText || title.textContent;
     title.dataset.originalText = originalText;
     if (!shouldNotTranslate(originalText, title.closest('.menu-item'))) {
-      title.textContent = translateText(originalText, lang, title.closest('.menu-item'));
+      const translated = await translateText(originalText, lang, title.closest('.menu-item'));
+      title.textContent = translated;
     }
-  });
+  }
 }
 
 function translateCart(lang) {
@@ -424,18 +460,9 @@ function translateCart(lang) {
     emptyCart.querySelector('h3').textContent = t.empty_cart;
     emptyCart.querySelector('p').textContent = t.add_items;
   }
-  
-  // Translate cart items (except drinks)
-  document.querySelectorAll('.cart-item-name').forEach(itemName => {
-    const originalText = itemName.dataset.originalText || itemName.textContent;
-    itemName.dataset.originalText = originalText;
-    if (!shouldNotTranslate(originalText, itemName.closest('.cart-item'))) {
-      itemName.textContent = translateText(originalText, lang, itemName.closest('.cart-item'));
-    }
-  });
 }
 
-function translateAdminPanel(lang) {
+async function translateAdminPanel(lang) {
   const t = translations[lang];
   
   // Translate admin UI elements
@@ -485,10 +512,7 @@ function translateAdminPanel(lang) {
   if (saveServiceBtn) saveServiceBtn.textContent = t.save_service;
   
   const translationsTitle = document.querySelector('#translations-tab h2');
-  if (translationsTitle) translationsTitle.textContent = t.translations_management;
-  
-  const staticTranslationsTitle = document.querySelector('#translations-tab h3');
-  if (staticTranslationsTitle) staticTranslationsTitle.textContent = t.static_translations;
+  if (translationsTitle) translationsTitle.textContent = t.static_translations;
   
   const menuItemsTitle = document.querySelector('#translations-tab .translation-section:nth-child(3) h3');
   if (menuItemsTitle) menuItemsTitle.textContent = t.menu_item_translations;
@@ -500,13 +524,15 @@ function translateAdminPanel(lang) {
   if (autoTranslateBtn) autoTranslateBtn.textContent = t.auto_translate_all;
   
   // Translate admin menu items (except drinks)
-  document.querySelectorAll('.admin-menu-item h3').forEach(title => {
+  const adminTitles = document.querySelectorAll('.admin-menu-item h3');
+  for (const title of adminTitles) {
     const originalText = title.dataset.originalText || title.textContent;
     title.dataset.originalText = originalText;
     if (!shouldNotTranslate(originalText, title.closest('.admin-menu-item'))) {
-      title.textContent = translateText(originalText, lang, title.closest('.admin-menu-item'));
+      const translated = await translateText(originalText, lang, title.closest('.admin-menu-item'));
+      title.textContent = translated;
     }
-  });
+  }
 }
 
 function initLanguage() {
