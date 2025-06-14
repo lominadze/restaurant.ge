@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="admin_panel">ადმინ პანელი</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('isAdminAuthenticated') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    let translations = {};
+    let currentLanguage = localStorage.getItem('selectedLanguage') || 'ka';
+
+    function loadTranslations(lang) {
+      firebase.database().ref(`translations/${lang}`).once('value').then(snapshot => {
+        translations[lang] = snapshot.val() || {};
+        applyTranslations(lang);
+        if (window.loadAdminMenu) loadAdminMenu();
+        if (window.loadServiceCharge) loadServiceCharge();
+      });
+    }
+
+    function applyTranslations(lang) {
+      const langData = translations[lang] || {};
+      document.querySelectorAll('[data-lang-key]').forEach(el => {
+        const key = el.getAttribute('data-lang-key');
+        if (langData[key]) el.textContent = langData[key];
+      });
+    }
+
+    loadTranslations(currentLanguage);
+  </script>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1 data-lang-key="admin_panel">ადმინის პანელი</h1>
+      <button id="logout-btn" class="logout-btn" data-lang-key="logout">გამოსვლა</button>
+    </div>
+    
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="menu" data-lang-key="menu_management">მენიუს მართვა</button>
+      <button class="tab-btn" data-tab="translations" data-lang-key="translations_management">თარგმანების მართვა</button>
+      <button class="tab-btn" data-tab="service" data-lang-key="service_management">სერვისის მართვა</button>
+    </div>
+    
+    <div id="menu-tab" class="tab-content active">
+      <form id="add-item-form" class="add-item-form">
+        <h2 data-lang-key="add_product">ახალი პროდუქტის დამატება</h2>
+        
+        <div class="form-row horizontal-row">
+          <div class="form-group">
+            <label for="item-name" data-lang-key="name">სახელი (ქართული):</label>
+            <input type="text" id="item-name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="item-price" data-lang-key="price">ფასი (₾):</label>
+            <input type="number" id="item-price" step="0.01" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="item-category" data-lang-key="category">კატეგორია:</label>
+            <select id="item-category">
+              <option value="hot_dishes" data-lang-key="hot_dishes">ცხელი კერძები</option>
+              <option value="cold_dishes" data-lang-key="cold_dishes">ცივი კერძები</option>
+              <option value="bakery" data-lang-key="bakery">ცომეული</option>
+              <option value="soups" data-lang-key="soups">წვნიანები</option>
+              <option value="desserts" data-lang-key="desserts">დესერტი</option>
+              <option value="drinks" data-lang-key="drinks">სასმელები</option>
+              <option value="alcoholic_drinks" data-lang-key="alcoholic_drinks">ალკოჰოლური სასმელები</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="item-description-ka" data-lang-key="description">აღწერა (ქართული):</label>
+          <textarea id="item-description-ka"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="item-image-url" data-lang-key="image_url">სურათის URL:</label>
+          <input type="text" id="item-image-url" placeholder="ჩასვით სურათის ლინკი" data-lang-key="image_placeholder">
+          <div id="image-preview-container"></div>
+        </div>
+        
+        <div class="form-group availability-group">
+          <input type="checkbox" id="item-available" checked>
+          <label for="item-available" data-lang-key="available">ხელმისაწვდომია</label>
+        </div>
+        
+        <button type="submit" class="btn" data-lang-key="add">დამატება</button>
+      </form>
+      
+      <div class="admin-menu">
+        <div class="admin-header">
+          <h2 data-lang-key="menu_management">მენიუს მართვა</h2>
+          <div class="admin-search-box">
+            <input type="text" id="admin-search-input" placeholder="პროდუქტის ძებნა..." data-lang-key="search_products">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+          </div>
+        </div>
+        <div id="admin-menu-container" class="admin-menu-container"></div>
+      </div>
+    </div>
+    
+    <div id="translations-tab" class="tab-content">
+      <div class="translations-management">
+        <h2 data-lang-key="translations_management">თარგმანების მართვა</h2>   
+        <div class="translation-section">
+          <h3 data-lang-key="menu_item_translations">მენიუს ელემენტები</h3>
+          <div class="translate-actions">
+            <button id="auto-translate-all" class="btn" data-lang-key="auto_translate_all">
+              <i class="fas fa-robot"></i> ყველა თარგმნა ავტომატურად
+            </button>
+            <div id="translation-status" class="translation-status"></div>
+          </div>
+          <div id="menu-item-translations-container" class="menu-item-translations-container">
+            <div class="menu-item-translations-header">
+              <div class="menu-item-name" data-lang-key="menu_item">პროდუქტი</div>
+              <div class="menu-item-translation" data-lang-key="translation">თარგმანი</div>
+            </div>
+            <div id="menu-item-translations-list" class="menu-item-translations-list"></div>
+          </div>
+        </div>
+        <div class="save-translations-container">
+          <button id="save-translations" class="btn" data-lang-key="save_translations">შენახვა</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="service-tab" class="tab-content">
+      <div class="service-management">
+        <h2 data-lang-key="service_management">სერვისის მართვა</h2>
+        
+        <form id="service-charge-form">
+          <div class="form-group">
+            <label for="service-enabled" data-lang-key="service_enabled">სერვისის ჩართვა:</label>
+            <input type="checkbox" id="service-enabled" checked>
+          </div>
+          
+          <div class="form-group">
+            <label for="service-percentage" data-lang-key="service_percentage">სერვისის პროცენტი (%):</label>
+            <input type="number" id="service-percentage" min="0" max="100" step="0.1" value="10">
+          </div>
+          
+          <button type="submit" class="btn" data-lang-key="save_service">შენახვა</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div id="edit-product-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 data-lang-key="edit_product">პროდუქტის რედაქტირება</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="edit-item-form">
+          <input type="hidden" id="edit-item-id">
+          
+          <div class="form-row horizontal-row">
+            <div class="form-group">
+              <label for="edit-item-name" data-lang-key="name">სახელი (ქართული):</label>
+              <input type="text" id="edit-item-name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-item-price" data-lang-key="price">ფასი (₾):</label>
+              <input type="number" id="edit-item-price" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="edit-item-category" data-lang-key="category">კატეგორია:</label>
+              <select id="edit-item-category">
+                <option value="hot_dishes" data-lang-key="hot_dishes">ცხელი კერძები</option>
+                <option value="cold_dishes" data-lang-key="cold_dishes">ცივი კერძები</option>
+                <option value="bakery" data-lang-key="bakery">ცომეული</option>
+                <option value="soups" data-lang-key="soups">წვნიანები</option>
+                <option value="desserts" data-lang-key="desserts">დესერტი</option>
+                <option value="drinks" data-lang-key="drinks">სასმელები</option>
+                <option value="alcoholic_drinks" data-lang-key="alcoholic_drinks">ალკოჰოლური სასმელები</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-item-description-ka" data-lang-key="description">აღწერა (ქართული):</label>
+            <textarea id="edit-item-description-ka"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="edit-item-image-url" data-lang-key="image_url">სურათის URL:</label>
+            <input type="text" id="edit-item-image-url" placeholder="ჩასვით სურათის ლინკი">
+            <div id="edit-image-preview-container"></div>
+          </div>
+          
+          <div class="form-group availability-group">
+            <input type="checkbox" id="edit-item-available">
+            <label for="edit-item-available" data-lang-key="available">ხელმისაწვდომია</label>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary cancel-edit" data-lang-key="cancel">გაუქმება</button>
+            <button type="submit" class="btn btn-primary" data-lang-key="save_changes">ცვლილებების შენახვა</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!-- Add this CSS to your index.css or admin.css -->
+<style>
+  /* Base Alert Styles */
+  .custom-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease-in-out;
+    font-family: 'Noto Sans Georgian', sans-serif;
+  }
+
+  /* Confirmation Alert (for questions) */
+  .confirm-alert {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 5px solid #ffeeba;
+  }
+
+  /* Success Alert */
+  .success-alert {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #c3e6cb;
+  }
+
+  /* Error Alert */
+  .error-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #f5c6cb;
+  }
+
+  /* Alert Buttons */
+  .alert-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .alert-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .alert-btn-confirm {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .alert-btn-cancel {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /* Alert Icon */
+  .alert-icon {
+    margin-right: 12px;
+    font-size: 20px;
+  }
+
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; top: 0; }
+    to { opacity: 1; top: 20px; }
+  }
+
+  @keyframes fadeOut {
+    from { opacity: 1; top: 20px; }
+    to { opacity: 0; top: 0; }
+  }
+
+  /* Close Button */
+  .alert-close {
+    margin-left: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+  }
+</style>
+
+<!-- Add this JavaScript to handle alerts -->
+<script>
+  // Function to show a styled alert
+  function showAlert(message, type = 'success', options = {}) {
+    // Remove any existing alerts first
+    const existingAlert = document.querySelector('.custom-alert');
+    if (existingAlert) existingAlert.remove();
+
+    const alert = document.createElement('div');
+    alert.className = `custom-alert ${type}-alert`;
+    
+    // Icon based on type
+    let icon = '✅';
+    if (type === 'confirm') icon = '❓';
+    if (type === 'error') icon = '❌';
+    
+    // For confirmation dialogs (with buttons)
+    if (type === 'confirm') {
+      alert.innerHTML = `
+        <span class="alert-icon">${icon}</span>
+        <div>
+          <div class="alert-message">${message}</div>
+          <div class="alert-buttons">
+            <button class="alert-btn alert-btn-confirm">${options.confirmText || 'დიახ'}</button>
+            <button class="alert-btn alert-btn-cancel">${options.cancelText || 'არა'}</button>
+          </div>
+        </div>
+      `;
+      
+      // Add event listeners to buttons
+      const confirmBtn = alert.querySelector('.alert-btn-confirm');
+      const cancelBtn = alert.querySelector('.alert-btn-cancel');
+      
+      confirmBtn.addEventListener('click', () => {
+        if (options.onConfirm) options.onConfirm();
+        removeAlert(alert);
+      });
+      
+      cancelBtn.addEventListener('click', () => {
+        if (options.onCancel) options.onCancel();
+        removeAlert(alert);
+      });
+    } 
+    // For simple alerts (success/error)
+    else {
+      alert.innerHTML = `
+        <span class="alert-icon">${icon}</span>
+        <div class="alert-message">${message}</div>
+        <span class="alert-close" onclick="removeAlert(this.parentNode)">&times;</span>
+      `;
+      
+      // Auto-close after delay if specified
+      if (options.autoClose !== false) {
+        setTimeout(() => {
+          removeAlert(alert);
+        }, options.duration || 3000);
+      }
+    }
+    
+    document.body.appendChild(alert);
+    
+    return alert;
+  }
+  
+  function removeAlert(alert) {
+    alert.style.animation = 'fadeOut 0.3s ease-in-out';
+    setTimeout(() => {
+      alert.remove();
+    }, 300);
+  }
+</script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7orLva5kfdJK3MsT5uXp9RYfycRYNQg8",
+      authDomain: "restaurant-menu-2652a.firebaseapp.com",
+      projectId: "restaurant-menu-2652a",
+      storageBucket: "restaurant-menu-2652a.appspot.com",
+      messagingSenderId: "320792367742",
+      appId: "1:320792367742:web:5881bfc879ec669eca7e2f",
+      measurementId: "G-9FMF7MFXWT"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    
+   document.getElementById('logout-btn').addEventListener('click', function() {
+  // შევქმნათ მორგებული დიალოგური ფანჯარა HTML/CSS-ით
+  const modal = document.createElement('div');
+  modal.style.position = 'fixed';
+  modal.style.top = '0';
+  modal.style.left = '0';
+  modal.style.width = '100%';
+  modal.style.height = '100%';
+  modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+  modal.style.display = 'flex';
+  modal.style.justifyContent = 'center';
+  modal.style.alignItems = 'center';
+  modal.style.zIndex = '1000';
+  
+  const modalContent = document.createElement('div');
+  modalContent.style.backgroundColor = '#fff';
+  modalContent.style.padding = '30px';
+  modalContent.style.borderRadius = '10px';
+  modalContent.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+  modalContent.style.maxWidth = '400px';
+  modalContent.style.width = '90%';
+  modalContent.style.textAlign = 'center';
+  
+  const message = document.createElement('p');
+  message.textContent = translations[currentLanguage]?.logout_confirm || 'დარწმუნებული ხართ, რომ გსურთ გამოსვლა?';
+  message.style.marginBottom = '25px';
+  message.style.fontSize = '18px';
+  message.style.color = '#333';
+  
+  const buttonContainer = document.createElement('div');
+  buttonContainer.style.display = 'flex';
+  buttonContainer.style.justifyContent = 'center';
+  buttonContainer.style.gap = '15px';
+  
+  const confirmButton = document.createElement('button');
+  confirmButton.textContent = translations[currentLanguage]?.yes || 'დიახ';
+  confirmButton.style.padding = '10px 25px';
+  confirmButton.style.backgroundColor = '#e74c3c';
+  confirmButton.style.color = 'white';
+  confirmButton.style.border = 'none';
+  confirmButton.style.borderRadius = '5px';
+  confirmButton.style.cursor = 'pointer';
+  confirmButton.style.fontWeight = 'bold';
+  confirmButton.style.transition = 'background-color 0.3s';
+  
+  confirmButton.addEventListener('mouseover', () => {
+    confirmButton.style.backgroundColor = '#c0392b';
+  });
+  
+  confirmButton.addEventListener('mouseout', () => {
+    confirmButton.style.backgroundColor = '#e74c3c';
+  });
+  
+  const cancelButton = document.createElement('button');
+  cancelButton.textContent = translations[currentLanguage]?.no || 'არა';
+  cancelButton.style.padding = '10px 25px';
+  cancelButton.style.backgroundColor = '#3498db';
+  cancelButton.style.color = 'white';
+  cancelButton.style.border = 'none';
+  cancelButton.style.borderRadius = '5px';
+  cancelButton.style.cursor = 'pointer';
+  cancelButton.style.fontWeight = 'bold';
+  cancelButton.style.transition = 'background-color 0.3s';
+  
+  cancelButton.addEventListener('mouseover', () => {
+    cancelButton.style.backgroundColor = '#2980b9';
+  });
+  
+  cancelButton.addEventListener('mouseout', () => {
+    cancelButton.style.backgroundColor = '#3498db';
+  });
+  
+  // დავამატოთ ელემენტები
+  buttonContainer.appendChild(confirmButton);
+  buttonContainer.appendChild(cancelButton);
+  modalContent.appendChild(message);
+  modalContent.appendChild(buttonContainer);
+  modal.appendChild(modalContent);
+  document.body.appendChild(modal);
+  
+  // დავამატოთ მოქმედებები ღილაკებზე
+  confirmButton.addEventListener('click', function() {
+    localStorage.removeItem('isAdminAuthenticated');
+    window.location.href = 'index.html';
+  });
+  
+  cancelButton.addEventListener('click', function() {
+    document.body.removeChild(modal);
+  });
+  
+  // დავხუროთ მოდალი, თუ მომხმარებელი დააწკაპებს მის გარეთ
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      document.body.removeChild(modal);
+    }
+  });
+});
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+        
+        if (this.dataset.tab === 'service' && window.loadServiceCharge) {
+          loadServiceCharge();
+        }
+        if (this.dataset.tab === 'translations' && window.loadTranslationsForEditor) {
+          loadTranslationsForEditor(currentLanguage);
+          loadMenuItemTranslations(currentLanguage);
+        }
+      });
+    });
+
+    // Initialize modal close functionality
+    function setupModalClose() {
+      const modal = document.getElementById('edit-product-modal');
+      const closeButtons = [
+        document.querySelector('.close-modal'),
+        document.querySelector('.cancel-edit')
+      ];
+      
+      // Close when clicking on X or Cancel button
+      closeButtons.forEach(btn => {
+        if (btn) {
+          btn.addEventListener('click', () => {
+            modal.style.display = 'none';
+          });
+        }
+      });
+      
+      // Close when clicking outside modal
+      window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+      
+      // Close with Escape key
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.style.display === 'block') {
+          modal.style.display = 'none';
+        }
+      });
+    }
+
+    // Call setup when DOM is loaded
+    document.addEventListener('DOMContentLoaded', setupModalClose);
+  </script>
+  <script src="admin.js"></script>
+</body>
+</html>

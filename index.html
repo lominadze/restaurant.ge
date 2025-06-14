@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>მაჭახელა - ქართული რესტორანი</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <!-- Translations -->
+  <script src="translations.js" type="module"></script>
+</head>
+<body>
+<div id="main-page">
+  <header class="header">
+    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80" alt="რესტორანი" class="header-image">
+    <div class="header-controls">
+      <select class="language-select" id="language-select">
+        <option value="ka">ქართული</option>
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+        <option value="tr">Türkçe</option>
+      </select>
+      <button id="admin-btn" class="admin-btn">ადმინი</button>
+    </div>
+  </header>
+  
+  <main class="container">
+    <h1 class="restaurant-title">მაჭახელა</h1>
+    
+    <div class="info-section">
+      <p class="location">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+        </svg>
+        მაჭახელა 13, ბათუმი
+      </p>
+      <p class="wifi">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 3C7.31 3 3.36 4.9.29 8.01L12 20.23 23.71 8.01C20.64 4.9 16.69 3 12 3zm0 15.47l-7.18-7.18C6.67 8.85 9.2 7.5 12 7.5c2.8 0 5.33 1.35 7.18 3.79L12 18.47z"/>
+        </svg>
+        WiFi: Gourmet_2023
+      </p>
+      <p class="wifi">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 3a5 5 0 0 0-5 5v2H4v12h16V10h-3V8a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v2H9V8a3 3 0 0 1 3-3zm-4 9h8v2H8v-2z"/>
+        </svg>
+        PASS: Gourmet_2023
+      </p>
+      <p class="info">
+        ჩვენი რესტორანი მოგაწვდით ტრადიციულ და თანამედროვე ქართულ კერძებს. 
+        ყველა პროდუქტი ადგილობრივი ფერმერებისგან არის შერჩეული.
+      </p>
+      <p class="spacing">
+        ყოველდღე: 10:00 - 23:00
+      </p>
+    </div>
+
+    <div class="category-filters">
+      <button class="filter-btn active" data-category="all">ყველა</button>
+      <button class="filter-btn" data-category="hot_dishes">ცხელი კერძები</button>
+      <button class="filter-btn" data-category="cold_dishes">ცივი კერძები</button>
+      <button class="filter-btn" data-category="bakery">ცომეული</button>
+      <button class="filter-btn" data-category="soups">წვნიანები</button>
+      <button class="filter-btn" data-category="desserts">დესერტი</button>
+      <button class="filter-btn" data-category="drinks">სასმელები</button>
+      <button class="filter-btn" data-category="alcoholic_drinks">ალკოჰოლური სასმელები</button>
+    </div>
+    
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="მენიუში ძებნა..." autocomplete="off">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="cart-icon" id="cart-icon">
+      🍴 <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <div id="cart-panel" class="cart-panel">
+      <div class="cart-header">
+        <h2>თქვენი მენიუ</h2>
+        <button class="close-cart">&times;</button>
+      </div>
+      <div class="cart-items" id="cart-items"></div>
+      
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span class="summary-label">ჯამი:</span>
+            <span class="summary-value" id="cart-subtotal">0.00 ₾</span>
+          </div>
+          <div class="summary-row service-charge-row">
+            <span class="summary-label">სერვისი (<span id="service-percentage">10</span>%):</span>
+            <span class="summary-value" id="cart-service">0.00 ₾</span>
+          </div>
+          <div class="summary-row total-row">
+            <span class="summary-label">სულ:</span>
+            <span class="summary-value" id="cart-total">0.00 ₾</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="clear-cart">მენიუს გასუფთავება</button>
+      </div>
+    </div>
+    
+    <div id="menu-container" class="menu-container"></div>
+  </main>
+</div>
+
+<!-- Authentication Modal -->
+<div id="auth-modal" class="auth-modal">
+  <div class="auth-container">
+    <h2>ადმინის ავტორიზაცია</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="admin-username">მომხმარებელი:</label>
+        <input type="text" id="admin-username" required>
+      </div>
+      <div class="form-group">
+        <label for="admin-password">პაროლი:</label>
+        <input type="password" id="admin-password" required>
+      </div>
+      <button type="submit" class="btn">შესვლა</button>
+      <div id="login-error" class="error-message"></div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { initLanguage } from './translations.js';
+  
+  // Firebase კონფიგურაცია
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7orLva5kfdJK3MsT5uXp9RYfycRYNQg8",
+    authDomain: "restaurant-menu-2652a.firebaseapp.com",
+    projectId: "restaurant-menu-2652a",
+    storageBucket: "restaurant-menu-2652a.appspot.com",
+    messagingSenderId: "320792367742",
+    appId: "1:320792367742:web:5881bfc879ec669eca7e2f",
+    measurementId: "G-9FMF7MFXWT"
+  };
+  
+  // Firebase ინიციალიზაცია
+  firebase.initializeApp(firebaseConfig);
+
+  // ენის ინიციალიზაცია
+  initLanguage();
+
+  // ენის შეცვლა
+  document.getElementById('language-select').addEventListener('change', function() {
+    const newLang = this.value;
+    localStorage.setItem('selectedLanguage', newLang);
+    location.reload(); // გვერდის განახლება
+  });
+
+  // Admin button functionality
+  document.getElementById('admin-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('auth-modal').style.display = 'flex';
+  });
+
+  // Login form handler
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('admin-username').value;
+    const password = document.getElementById('admin-password').value;
+    
+    // Hardcoded credentials (admin/admin)
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem('isAdminAuthenticated', 'true');
+      window.location.href = 'admin.html';
+    } else {
+      document.getElementById('login-error').textContent = 'არასწორი მომხმარებელი ან პაროლი';
+    }
+  });
+
+  // Close modal when clicking outside
+  document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+</script>
+<script src="menu.js" type="module"></script>
+</body>
+</html>
